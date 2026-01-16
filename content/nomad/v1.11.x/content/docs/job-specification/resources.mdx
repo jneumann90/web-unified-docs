@@ -132,12 +132,12 @@ and application runtime.
 
 To help maximize cluster memory utilization while allowing a safety margin for
 unexpected load spikes, Nomad allows job authors to set two separate resource
-limits that correspond to the hard and soft limits described above.
+limits that correspond to the hard and soft limits described previously.
 
-* `memory`: the hard limit unless `memory_max` is set. If `memory_max` is set,
-  then `memory` is the reservation.
-* `memory_max`: the hard limit if set. If `memory_max` is unset, then `memory`
-  is the hard limit. If `memory_max` is set to -1 and it is supported in the
+- `memory`: The hard limit unless `memory_max` is set. If `memory_max` is set,
+  then `memory` is the soft limit.
+- `memory_max`: The hard limit if set. If `memory_max` is unset, then `memory`
+  is the hard limit. If `memory_max` is set to `-1` and it is supported in the
   driver, the task has no hard limit.
 
 The `memory_max` limit attribute is currently supported by the official
@@ -149,7 +149,12 @@ Memory oversubscription by setting `memory_max` is opt-in. Nomad operators can
 enable [Memory Oversubscription in the scheduler
 configuration][api_sched_config]. Enterprise customers can use [Resource
 Quotas][quota_spec] to limit the memory oversubscription and enable or disable
-memory oversubscription per [node pool][np_sched_config].
+Memory oversubscription by setting `memory_max` is opt-in. Nomad operators can
+enable memory oversubscription in the scheduler configuration. Refer to
+the [`MemoryOversubscritionEnabled` parameter]][api_sched_config] for details.
+Enterprise customers can use [resource quotas][quota_spec] to limit the memory
+oversubscription and enable or disable memory oversubscription per [node
+pool][np_sched_config].
 
 To avoid degrading the cluster experience, we recommend examining and monitoring
 resource utilization and considering the following suggestions:
@@ -172,7 +177,7 @@ resource utilization and considering the following suggestions:
   usage. If you intend to use both oversubscription and quotas, you should use a
   Sentinel policy to prevent setting `memory_max` to -1.
 
-[api_sched_config]: /nomad/api-docs/operator/scheduler#update-scheduler-configuration
+[api_sched_config]: /nomad/api-docs/operator/scheduler#memoryoversubscriptionenabled-1
 [device]: /nomad/docs/job-specification/device 'Nomad device Job Specification'
 [docker_cpu]: /nomad/docs/deploy/task-driver/docker#cpu
 [exec_cpu]: /nomad/docs/deploy/task-driver/exec#cpu
